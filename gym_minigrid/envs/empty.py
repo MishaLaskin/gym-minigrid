@@ -34,6 +34,10 @@ class EmptyEnv6x6(EmptyEnv):
     def __init__(self):
         super().__init__(size=6)
 
+class EmptyEnv8x8(EmptyEnv):
+    def __init__(self):
+        super().__init__(size=8)
+
 class EmptyEnv16x16(EmptyEnv):
     def __init__(self):
         super().__init__(size=16)

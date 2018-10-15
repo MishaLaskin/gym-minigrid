@@ -11,6 +11,10 @@ CELL_PIXELS = 32
 # Number of cells (width and height) in the agent view
 AGENT_VIEW_SIZE = 7
 
+# Number of cells total
+
+TOTAL_CELLS = 16
+
 # Size of the array given as an observation to the agent
 OBS_ARRAY_SIZE = (AGENT_VIEW_SIZE, AGENT_VIEW_SIZE, 3)
 
@@ -716,7 +720,10 @@ class MiniGridEnv(gym.Env):
         self.step_count = 0
 
         # Return first observation
-        obs = self.gen_obs()
+        #obs = self.gen_obs()
+        obs = self.render('rgb_array')
+
+        # you can check the image here with image.show() using PIL
         return obs
 
     def seed(self, seed=1337):
@@ -1129,7 +1136,8 @@ class MiniGridEnv(gym.Env):
         if self.step_count >= self.max_steps:
             done = True
 
-        obs = self.gen_obs()
+        #obs = self.gen_obs()
+        obs = self.render('rgb_array')
 
         return obs, reward, done, {}
 
@@ -1141,7 +1149,6 @@ class MiniGridEnv(gym.Env):
         """
 
         topX, topY, botX, botY = self.get_view_exts()
-
         grid = self.grid.slice(topX, topY, AGENT_VIEW_SIZE, AGENT_VIEW_SIZE)
 
         for i in range(self.agent_dir + 1):
@@ -1149,7 +1156,9 @@ class MiniGridEnv(gym.Env):
 
         # Process occluders and visibility
         # Note that this incurs some performance cost
+
         if not self.see_through_walls:
+        #if False:
             vis_mask = grid.process_vis(agent_pos=(AGENT_VIEW_SIZE // 2 , AGENT_VIEW_SIZE - 1))
         else:
             vis_mask = np.ones(shape=(grid.width, grid.height), dtype=np.bool)
@@ -1184,8 +1193,11 @@ class MiniGridEnv(gym.Env):
         obs = {
             'image': image,
             'direction': self.agent_dir,
-            'mission': self.mission
+            'mission': self.mission,
         }
+
+        #pixel_image = self.get_obs_render(obs['image'])
+
 
         return obs
 
